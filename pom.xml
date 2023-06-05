@@ -14,4 +14,71 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-jar-plugin -->
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.kwhat/jnativehook -->
+        <dependency>
+            <groupId>com.github.kwhat</groupId>
+            <artifactId>jnativehook</artifactId>
+            <version>2.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
+        </dependency>
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.graalvm.js/js-scriptengine &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.graalvm.js</groupId>-->
+<!--            <artifactId>js-scriptengine</artifactId>-->
+<!--            <version>22.3.2</version>-->
+<!--        </dependency>-->
+
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.graalvm.js/js &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.graalvm.js</groupId>-->
+<!--            <artifactId>js</artifactId>-->
+<!--            <version>22.3.2</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.mozilla/rhino -->
+<!--        <dependency>-->
+<!--            <groupId>org.mozilla</groupId>-->
+<!--            <artifactId>rhino</artifactId>-->
+<!--            <version>1.7.14</version>-->
+<!--        </dependency>-->
+        <!-- https://mvnrepository.com/artifact/org.mariuszgromada.math/MathParser.org-mXparser -->
+        <dependency>
+            <groupId>org.mariuszgromada.math</groupId>
+            <artifactId>MathParser.org-mXparser</artifactId>
+            <version>5.0.7</version>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!-- Build an executable JAR -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>calculator.ApplicationRunner</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>
