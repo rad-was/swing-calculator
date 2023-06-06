@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>20</maven.compiler.source>
-        <maven.compiler.target>20</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -32,31 +32,19 @@
             <artifactId>commons-lang3</artifactId>
             <version>3.5</version>
         </dependency>
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.graalvm.js/js-scriptengine &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.graalvm.js</groupId>-->
-<!--            <artifactId>js-scriptengine</artifactId>-->
-<!--            <version>22.3.2</version>-->
-<!--        </dependency>-->
-
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.graalvm.js/js &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.graalvm.js</groupId>-->
-<!--            <artifactId>js</artifactId>-->
-<!--            <version>22.3.2</version>-->
-<!--        </dependency>-->
-        <!-- https://mvnrepository.com/artifact/org.mozilla/rhino -->
-<!--        <dependency>-->
-<!--            <groupId>org.mozilla</groupId>-->
-<!--            <artifactId>rhino</artifactId>-->
-<!--            <version>1.7.14</version>-->
-<!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.mariuszgromada.math/MathParser.org-mXparser -->
         <dependency>
             <groupId>org.mariuszgromada.math</groupId>
             <artifactId>MathParser.org-mXparser</artifactId>
             <version>5.0.7</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-assembly-plugin -->
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.6.0</version>
+        </dependency>
+
 
 
     </dependencies>
@@ -64,19 +52,26 @@
     <build>
         <plugins>
             <plugin>
-                <!-- Build an executable JAR -->
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
                     <archive>
                         <manifest>
-                            <addClasspath>true</addClasspath>
-                            <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>calculator.ApplicationRunner</mainClass>
+                            <mainClass>calculator.CalculatorPanel</mainClass>
                         </manifest>
                     </archive>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- bind to the packaging phase -->
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

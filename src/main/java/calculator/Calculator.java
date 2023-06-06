@@ -16,9 +16,9 @@ import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
 public class Calculator extends JFrame {
     Calculator() {
         super("Calculator");
-        try{
+        try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         setVisible(true);
@@ -223,9 +223,5 @@ public class Calculator extends JFrame {
         setVisible(true);
         pack();
         setLocationRelativeTo(null);
-    }
-
-    public static void main(String[] args) {
-        new Calculator();
     }
 }
