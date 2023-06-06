@@ -5,13 +5,9 @@ import org.mariuszgromada.math.mxparser.Expression;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.BufferedImage;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.swing.*;
 
 public class CalculatorPanel extends JPanel {
@@ -34,7 +30,7 @@ public class CalculatorPanel extends JPanel {
 
         setLayout(new BorderLayout());
 
-        display = new JTextField();
+        display = new JTextField("0");
         display.setPreferredSize(new Dimension(100, 50));
         display.setFont(new Font("Sans Serif", Font.PLAIN, 20));
         display.setFont(display.getFont().deriveFont(20f));
@@ -74,7 +70,7 @@ public class CalculatorPanel extends JPanel {
         for (calculator.Button b : numberButtons) {
             String text = b.getName();
             JButton button = new JButton(text);
-            button.setFont(new Font("Sans Serif", Font.BOLD, 15));
+            button.setFont(new Font("Sans Serif", Font.PLAIN, 17));
 
             c.weightx = 0.1;
             c.gridx = b.getX();
@@ -91,7 +87,7 @@ public class CalculatorPanel extends JPanel {
         InputMap inputMap = buttonPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 
         JButton add = new JButton("+");
-        add.setFont(new Font("Sans Serif", Font.BOLD, 15));
+        add.setFont(new Font("Sans Serif", Font.BOLD, 17));
         c.weightx = 0.1;
         c.gridx = 3;
         c.gridy = 4;
@@ -112,7 +108,7 @@ public class CalculatorPanel extends JPanel {
         });
 
         JButton subtract = new JButton("-");
-        subtract.setFont(new Font("Sans Serif", Font.BOLD, 15));
+        subtract.setFont(new Font("Sans Serif", Font.BOLD, 17));
         c.weightx = 0.1;
         c.gridx = 3;
         c.gridy = 3;
@@ -132,10 +128,8 @@ public class CalculatorPanel extends JPanel {
             }
         });
 
-        //JButton multiply = new JButton("×");
-        HighlightButton multiply = new HighlightButton("×");
-        multiply.setFont(new Font("Sans Serif", Font.BOLD, 15));
-        multiply.setHighlight(new Color(157, 233, 134, 64));
+        JButton multiply = new JButton("×");
+        multiply.setFont(new Font("Sans Serif", Font.BOLD, 17));
         c.weightx = 0.1;
         c.gridx = 3;
         c.gridy = 2;
@@ -155,9 +149,8 @@ public class CalculatorPanel extends JPanel {
             }
         });
 
-        HighlightButton divide = new HighlightButton("÷");
-        divide.setFont(new Font("Sans Serif", Font.BOLD, 15));
-        divide.setHighlight(new Color(157, 233, 134, 64));
+        JButton divide = new JButton("÷");
+        divide.setFont(new Font("Sans Serif", Font.BOLD, 17));
         c.weightx = 0.1;
         c.gridx = 3;
         c.gridy = 1;
@@ -178,7 +171,7 @@ public class CalculatorPanel extends JPanel {
         });
 
         JButton separator = new JButton(".");
-        separator.setFont(new Font("Sans Serif", Font.BOLD, 15));
+        separator.setFont(new Font("Sans Serif", Font.BOLD, 17));
         c.weightx = 0.1;
         c.gridx = 2;
         c.gridy = 5;
@@ -201,13 +194,16 @@ public class CalculatorPanel extends JPanel {
         });
 
         JButton backspace = new JButton("⌫");
-        backspace.setFont(new Font("Sans Serif", Font.BOLD, 15));
+        backspace.setFont(new Font("Sans Serif", Font.PLAIN, 17));
         c.weightx = 0.1;
         c.gridx = 2;
         c.gridy = 1;
         backspace.addActionListener(e -> {
             if (!display.getText().isBlank() && !display.getText().equals("0")) {
                 display.setText(display.getText().substring(0, display.getText().length() - 1));
+                if (display.getText().isBlank()) {
+                    display.setText("0");
+                }
                 currentNumber = currentNumber.substring(0, currentNumber.length() - 1);
             }
         });
@@ -221,13 +217,14 @@ public class CalculatorPanel extends JPanel {
         });
 
         JButton clear = new JButton("C");
-        clear.setFont(new Font("Sans Serif", Font.BOLD, 15));
+        clear.setFont(new Font("Sans Serif", Font.PLAIN, 17));
         c.weightx = 0.1;
         c.gridx = 1;
         c.gridy = 1;
         clear.addActionListener(e -> {
             if (!display.getText().isBlank()) {
                 display.setText("0");
+                resultLabel.setText("");
                 currentNumber = "";
             }
         });
@@ -241,22 +238,15 @@ public class CalculatorPanel extends JPanel {
         });
 
         JButton equal = new JButton("=");
-        equal.setFont(new Font("Sans Serif", Font.BOLD, 15));
+        equal.setFont(new Font("Sans Serif", Font.BOLD, 17));
         c.weightx = 0.1;
         c.gridx = 3;
         c.gridy = 5;
         equal.addActionListener(e -> {
-//            if (!display.getText().isBlank()
-//                    && Character.isDigit(display.getText().charAt(display.getText().length() - 1))) {
-//                // display.replaceSelection("=");
-//                resultLabel.setText("= ");
-//            }
             if (validOperation(display.getText())) {
-                //Expression ex = new Expression(display.getText().substring(0, display.getText().length() - 1));
                 Expression ex = new Expression(display.getText());
                 double result = ex.calculate();
                 DecimalFormat format = new DecimalFormat("#,##########0.##########");
-                //display.setText(display.getText() + format.format(result));
                 resultLabel.setText("= " + format.format(result));
             }
         });
@@ -276,17 +266,7 @@ public class CalculatorPanel extends JPanel {
         if (s.isBlank() || s.isEmpty()) {
             return false;
         }
-        if (StringUtils.containsAny(s, "+-÷×")) {
-            //String[] numbers = s.split("[+-÷×]");
-            return true;
-        }
-        return false;
-    }
-
-    private static Object evaluateExpression(String mathExpression) throws ScriptException {
-        ScriptEngineManager mgr = new ScriptEngineManager();
-        ScriptEngine engine = mgr.getEngineByName("JavaScript");
-        return engine.eval(mathExpression);
+        return StringUtils.containsAny(s, "+-÷×");
     }
 
     private static void createAndShowUI() {
@@ -297,7 +277,7 @@ public class CalculatorPanel extends JPanel {
                  InstantiationException e) {
             throw new RuntimeException(e);
         }
-        frame.setPreferredSize(new Dimension(320, 350));
+        frame.setPreferredSize(new Dimension(320, 360));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(new CalculatorPanel());
         frame.setResizable(false);
@@ -306,13 +286,7 @@ public class CalculatorPanel extends JPanel {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) throws ScriptException {
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowUI();
-            }
-        });
+    public static void main(String[] args) {
+        EventQueue.invokeLater(CalculatorPanel::createAndShowUI);
     }
-
-
 }
