@@ -205,7 +205,9 @@ public class CalculatorPanel extends JPanel {
         separator.addActionListener(e -> {
             if (!display.getText().isBlank()
                     && Character.isDigit(display.getText().charAt(display.getText().length() - 1))
-                    && StringUtils.countMatches(currentNumber, ".") == 0) {
+                    && StringUtils.countMatches(currentNumber, ".") == 0
+                    && (resultLabel.getText().isEmpty()
+                    || StringUtils.countMatches(resultLabel.getText().substring(2), ".") == 0)) {
 
                 addResultToDisplayIfPresent();
                 display.replaceSelection(".");
