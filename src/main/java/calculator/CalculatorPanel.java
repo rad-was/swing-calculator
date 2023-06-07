@@ -48,7 +48,6 @@ public class CalculatorPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 currentNumber += e.getActionCommand();
-                System.out.println(currentNumber);
                 if (display.getText().equals("0")) {
                     display.setText("");
                 }
@@ -168,22 +167,16 @@ public class CalculatorPanel extends JPanel {
                     currentNumber = "";
                 } else {
                     if (!Character.isDigit(display.getText().charAt(display.getText().length() - 1))) {
-
-                        System.out.println(display.getText().charAt(display.getText().length() - 1));
                         currentNumber = "";
-                        System.out.println("cur " + currentNumber);
                     } else {
-                        System.out.println(oldDisplay);
                         if (!Character.isDigit(oldDisplay.charAt(oldDisplay.length() - 1))) {
                             currentNumber = extractLastNumber(display.getText());
                         } else {
                             currentNumber = currentNumber.substring(0, currentNumber.length() - 1);
                         }
                     }
-                    // SEEMS TO BE WORKING ?? SOMETIMES
-                    // LOOK INTO IT AND FIX
+                    // UGLY BUT SEEMS TO BE WORKING FOR NOW ?
                 }
-                System.out.println(currentNumber);
             }
         });
         buttonPanel.add(backspace, gbc);
