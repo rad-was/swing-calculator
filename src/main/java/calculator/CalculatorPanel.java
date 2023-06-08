@@ -320,9 +320,13 @@ public class CalculatorPanel extends JPanel {
     private void addResultToDisplayIfPresent() {
         if (!resultLabel.getText().isBlank()) {
             String result = resultLabel.getText().substring(2); // to get just the number
-            resultLabel.setText("");
-            display.setText(result);
-            currentNumber = result;
+            if (result.equals("NaN")) {
+                resultLabel.setText("");
+            } else {
+                resultLabel.setText("");
+                display.setText(result);
+                currentNumber = result;
+            }
         }
     }
 
