@@ -41,12 +41,14 @@ public abstract class Actions {
     }
 
     static AbstractAction genericAction(String s) {
+        String text = display.getText();
         return new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!display.getText().isBlank() &&
-                        (Character.isDigit(display.getText().charAt(display.getText().length() - 1)) ||
-                                display.getText().charAt(display.getText().length() - 1) == ')')) {
+                if (!text.isBlank() &&
+                        (Character.isDigit(text.charAt(text.length() - 1)) ||
+                                text.charAt(text.length() - 1) == ')' ||
+                                text.charAt(text.length() - 1) == '%')) {
 
                     addResultToDisplayIfPresent();
                     display.replaceSelection(s);
@@ -61,11 +63,14 @@ public abstract class Actions {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!display.getText().isBlank()) {
-
-                    if (StringUtils.countMatches(display.getText(), "(") > StringUtils.countMatches(display.getText(), ")")) {
-                        display.setText(display.getText() + ")");
+                    if (display.getText().equals("0")) {
+                        display.setText("(");
                     } else {
-                        display.setText(display.getText() + "(");
+                        if (StringUtils.countMatches(display.getText(), "(") > StringUtils.countMatches(display.getText(), ")")) {
+                            display.setText(display.getText() + ")");
+                        } else {
+                            display.setText(display.getText() + "(");
+                        }
                     }
                     currentNumber = "";
                 }

@@ -52,6 +52,7 @@ public class CalculatorPanel extends JPanel {
         ButtonCreator.createOperationButton(".", bold, gbc, 2, 5, KeyEvent.VK_PERIOD, false, "Period");
         ButtonCreator.createOperationButton("C", plain, gbc, 1, 1, KeyEvent.VK_C, false, "C");
         ButtonCreator.createOperationButton("=", plain, gbc, 3, 5, KeyEvent.VK_EQUALS, KeyEvent.VK_ENTER, false, "Equals");
+        ButtonCreator.createOperationButton("%", plain, gbc, 0, 5, KeyEvent.VK_5, true, "ShiftFive");
         ButtonCreator.createBackspaceButton(plain, gbc);
     }
 }

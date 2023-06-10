@@ -58,7 +58,7 @@ public abstract class ButtonCreator {
         gbc.gridy = gridy;
 
         switch (name) {
-            case "÷", "×", "-", "+" -> button.addActionListener(Actions.genericAction(name));
+            case "÷", "×", "-", "+", "%" -> button.addActionListener(Actions.genericAction(name));
             case "( )" -> button.addActionListener(Actions.parenthesesAction());
             case "." -> button.addActionListener(Actions.separatorAction());
             case "⌫" -> button.addActionListener(Actions.backspaceAction());
