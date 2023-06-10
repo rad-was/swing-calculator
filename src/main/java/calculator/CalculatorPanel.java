@@ -6,21 +6,18 @@ import org.mariuszgromada.math.mxparser.Expression;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.*;
 
 public class CalculatorPanel extends JPanel {
-    private final JTextField display;
-    private final JLabel resultLabel;
-    private String currentNumber = "";
+    static final JTextField display = new JTextField("0");
+    static final JLabel resultLabel = new JLabel();
+    static String currentNumber = "";
 
     public CalculatorPanel() {
         setLayout(new BorderLayout());
 
-        display = new JTextField("0");
         display.setPreferredSize(new Dimension(100, 50));
         display.setFont(new Font("Sans Serif", Font.PLAIN, 20));
         display.setFont(display.getFont().deriveFont(20f));
@@ -29,7 +26,6 @@ public class CalculatorPanel extends JPanel {
         display.setHorizontalAlignment(JTextField.RIGHT);
         add(display, BorderLayout.NORTH);
 
-        resultLabel = new JLabel();
         resultLabel.setPreferredSize(new Dimension(100, 40));
         resultLabel.setFont(new Font("Sans Serif", Font.PLAIN, 20));
         resultLabel.setHorizontalAlignment(JTextField.RIGHT);
@@ -41,51 +37,14 @@ public class CalculatorPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.ipady = 10;
-
         add(buttonPanel, BorderLayout.SOUTH);
 
-        Action numberAction = new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                currentNumber += e.getActionCommand();
-                if (display.getText().equals("0")) {
-                    display.setText("");
-                }
-                if (!resultLabel.getText().isBlank()) {
-                    resultLabel.setText("");
-                }
-                display.replaceSelection(e.getActionCommand());
-            }
-        };
+        final int[] numberButtonsGridX = {1, 0, 1, 2, 0, 1, 2, 0, 1, 2};
+        final int[] numberButtonsGridY = {5, 4, 4, 4, 3, 3, 3, 2, 2, 2};
 
-        ArrayList<Button> numberButtons = new ArrayList<>(List.of(
-                new Button("7", 0, 2),
-                new Button("8", 1, 2),
-                new Button("9", 2, 2),
-                new Button("4", 0, 3),
-                new Button("5", 1, 3),
-                new Button("6", 2, 3),
-                new Button("1", 0, 4),
-                new Button("2", 1, 4),
-                new Button("3", 2, 4),
-                new Button("0", 1, 5)
-        ));
-
-        for (Button b : numberButtons) {
-            String text = b.name();
-            JButton button = new JButton(text);
-            button.setFont(new Font("Sans Serif", Font.PLAIN, 17));
-
-            gbc.weightx = 0.1;
-            gbc.gridx = b.x();
-            gbc.gridy = b.y();
-            button.addActionListener(numberAction);
-            buttonPanel.add(button, gbc);
-
-            InputMap inputMap = buttonPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
-            inputMap.put(KeyStroke.getKeyStroke(text), text);
-            inputMap.put(KeyStroke.getKeyStroke("NUMPAD" + text), text);
-            buttonPanel.getActionMap().put(text, numberAction);
+        for (int i = 0; i < 10; ++i) {
+            ButtonCreator.createNumericButton(
+                    String.valueOf(i), buttonPanel, gbc, numberButtonsGridX[i], numberButtonsGridY[i]);
         }
 
         InputMap inputMap = buttonPanel.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -96,11 +55,11 @@ public class CalculatorPanel extends JPanel {
         createDivideButton(buttonPanel, gbc, inputMap);
         createSeparatorButton(buttonPanel, gbc, inputMap);
         createBackspaceButton(buttonPanel, gbc);
-        createClearButton(resultLabel, buttonPanel, gbc, inputMap);
-        createEqualButton(resultLabel, buttonPanel, gbc, inputMap);
+        createClearButton(buttonPanel, gbc, inputMap);
+        createEqualButton(buttonPanel, gbc, inputMap);
     }
 
-    private void createEqualButton(JLabel resultLabel, JPanel buttonPanel, GridBagConstraints gbc, InputMap inputMap) {
+    private void createEqualButton(JPanel buttonPanel, GridBagConstraints gbc, InputMap inputMap) {
         JButton equal = new JButton("=");
         equal.setFont(new Font("Sans Serif", Font.BOLD, 17));
         gbc.weightx = 0.1;
@@ -125,7 +84,7 @@ public class CalculatorPanel extends JPanel {
         });
     }
 
-    private void createClearButton(JLabel resultLabel, JPanel buttonPanel, GridBagConstraints gbc, InputMap inputMap) {
+    private void createClearButton(JPanel buttonPanel, GridBagConstraints gbc, InputMap inputMap) {
         JButton clear = new JButton("C");
         clear.setFont(new Font("Sans Serif", Font.PLAIN, 17));
         gbc.weightx = 0.1;
@@ -346,28 +305,5 @@ public class CalculatorPanel extends JPanel {
             return false;
         }
         return StringUtils.containsAny(s, "+-÷×");
-    }
-
-    private static void createAndShowUI() {
-        JFrame frame = new JFrame("Calculator");
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
-                 InstantiationException e) {
-            throw new RuntimeException(e);
-        }
-        frame.setPreferredSize(new Dimension(320, 360));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new CalculatorPanel());
-        frame.setResizable(false);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
-
-    public record Button(String name, int x, int y) { }
-
-    public static void main(String[] args) {
-        EventQueue.invokeLater(CalculatorPanel::createAndShowUI);
     }
 }
