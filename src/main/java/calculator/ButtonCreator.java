@@ -59,7 +59,7 @@ public abstract class ButtonCreator {
 
         switch (name) {
             case "÷", "×", "-", "+" -> button.addActionListener(Actions.genericAction(name));
-//            case "( )" -> button.addActionListener(Actions.parenthesesAction());
+            case "( )" -> button.addActionListener(Actions.parenthesesAction());
             case "." -> button.addActionListener(Actions.separatorAction());
             case "⌫" -> button.addActionListener(Actions.backspaceAction());
             case "C" -> button.addActionListener(Actions.clearAction());

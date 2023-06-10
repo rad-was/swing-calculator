@@ -44,7 +44,7 @@ public class CalculatorPanel extends JPanel {
         Font plain = new Font("Sans Serif", Font.PLAIN, 17);
         Font bold = new Font("Sans Serif", Font.BOLD, 17);
 
-//        ButtonCreator.createOperationButton("( )", plain, gbc, 0, 1, KeyEvent.VK_9, KeyEvent.VK_0, true, "ShiftNineZero");
+        ButtonCreator.createOperationButton("( )", plain, gbc, 0, 1, KeyEvent.VK_9, KeyEvent.VK_0, true, "ShiftNineZero");
         ButtonCreator.createOperationButton("+", bold, gbc, 3, 4, KeyEvent.VK_EQUALS, true, "ShiftPlus");
         ButtonCreator.createOperationButton("-", bold, gbc, 3, 3, KeyEvent.VK_MINUS, false, "Minus");
         ButtonCreator.createOperationButton("×", bold, gbc, 3, 2, KeyEvent.VK_8, true, "ShiftEight");

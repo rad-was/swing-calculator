@@ -44,8 +44,9 @@ public abstract class Actions {
         return new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!display.getText().isBlank()
-                        && Character.isDigit(display.getText().charAt(display.getText().length() - 1))) {
+                if (!display.getText().isBlank() &&
+                        (Character.isDigit(display.getText().charAt(display.getText().length() - 1)) ||
+                                display.getText().charAt(display.getText().length() - 1) == ')')) {
 
                     addResultToDisplayIfPresent();
                     display.replaceSelection(s);
@@ -55,20 +56,22 @@ public abstract class Actions {
         };
     }
 
-//    static AbstractAction parenthesesAction() {
-//        return new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                if (!display.getText().isBlank()) {
-//                    if (display.getText().contains("(")) {
-//                        display.setText(display.getText() + ")");
-//                    } else {
-//                        display.setText(display.getText() + "(");
-//                    }
-//                }
-//            }
-//        };
-//    }
+    static AbstractAction parenthesesAction() {
+        return new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!display.getText().isBlank()) {
+
+                    if (StringUtils.countMatches(display.getText(), "(") > StringUtils.countMatches(display.getText(), ")")) {
+                        display.setText(display.getText() + ")");
+                    } else {
+                        display.setText(display.getText() + "(");
+                    }
+                    currentNumber = "";
+                }
+            }
+        };
+    }
 
     static AbstractAction separatorAction() {
         return new AbstractAction() {
@@ -136,22 +139,23 @@ public abstract class Actions {
         return new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validOperation(display.getText())) {
-                    Expression ex = new Expression(display.getText());
+                String s = display.getText();
+                if (!s.isBlank() && !StringUtils.containsAny(s.substring(s.length() - 1), "+-÷×")) {
+                    if (s.charAt(s.length() - 1) == '.') {
+                        s = s.substring(0, s.length() - 1);
+                        display.setText(s);
+                    }
+                    if (StringUtils.countMatches(s, "(") > StringUtils.countMatches(s, ")")) {
+                        s = s + ")";
+                        display.setText(s);
+                    }
+                    Expression ex = new Expression(s);
                     double result = ex.calculate();
                     DecimalFormat format = new DecimalFormat("#,##########0.##########");
                     resultLabel.setText("= " + format.format(result));
                 }
             }
         };
-    }
-
-    private static boolean validOperation(String s) {
-        if (s.isBlank() || s.isEmpty()
-                || (!Character.isDigit(s.charAt(s.length() - 1)) && s.charAt(s.length() - 1) != ')')) {
-            return false;
-        }
-        return StringUtils.containsAny(s, "+-÷×");
     }
 
     private static String extractLastNumber(String input) {
