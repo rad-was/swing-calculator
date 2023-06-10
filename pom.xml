@@ -50,7 +50,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>calculator.CalculatorPanel</mainClass>
+                            <mainClass>calculator.ApplicationRunner</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>
